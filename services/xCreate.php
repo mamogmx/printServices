@@ -16,8 +16,8 @@ require_once "../config.php";
 $debugName=DBG_DIR."debug-create.txt";
 
 	
-	require_once "../lib/tbs_class_php.php";
-	require_once "../lib/tbs_plugin_opentbs.php";
+	require_once LIB_DIR."tbs_class.php";
+	require_once LIB_DIR."tbs_plugin_opentbs.php";
 	$TBS = new clsTinyButStrong; // new instance of TBS
 	$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load OpenTBS plugin
 	

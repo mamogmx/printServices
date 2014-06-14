@@ -1,0 +1,1 @@
+Directory dei modelli di stampa, divisa per progetto (se esistono progetti molteplici), applicazione e gruppo di modelli
