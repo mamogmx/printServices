@@ -1,12 +1,11 @@
 <?php
-require_once "config.php";
+require_once "../config.php";
+$debugName=DBG_DIR."debug-convert.txt";
+
 $docURL=$_REQUEST["docurl"];
 $filename=($_REQUEST["filename"])?($_REQUEST["filename"]):(array_pop(explode('/',$_REQUEST["docurl"])));
 
-
-$fDebug=fopen('dbg.txt','w');
-fwrite($fDebug,"Filename : $filename\n");
-fwrite($fDebug,"URL : $docURL\n");
+debug($debugName,$_REQUEST);
 
 //LETTURA DEL FILE DA URL
 $f=fopen($docURL,'rb');
@@ -33,7 +32,7 @@ if (file_exists($docName) && filesize($docName)){
 	if (stripos($res,$msg1)===FALSE and stripos($res,$msg2)===FALSE)
 		echo json_encode(Array("success"=>0,"message"=>$res));
 	else{
-		$pdfName=str_replace('.docx','.pdf',$docName);
+		$pdfName=str_replace('.odt','',str_replace('.docx','',$docName)).".pdf";
 		$f = fopen($pdfName,'r');
 		$text=fread($f,filesize($pdfName));
 		fclose($f);
@@ -42,7 +41,7 @@ if (file_exists($docName) && filesize($docName)){
 			unlink($pdfName);
 			header('Content-type: application/pdf');
 			print $text;
-			
+			return;
 			//print json_encode(Array("success"=>1,"filename"=>$text));
 		}
 		else{
@@ -67,6 +66,7 @@ if (file_exists($docName) && filesize($docName)){
 			fclose($f);
 			unlink($docurl);
 			echo json_encode(Array("success"=>1,"location"=>$location));
+			return;
 		}
 			
 	}

@@ -1,5 +1,4 @@
 <?php
-
 function extractDate($d){
 	$data=preg_replace('|([/\.])|','-',$d);
 	$data=date_parse($data);
@@ -20,9 +19,4 @@ function debug($file,$data,$mode='w+'){
 	fwrite($f,$result."\n");
 	fclose($f);
 }
-define('MODEL','/apps/printService/modelli/');
-define('DOC_DIR','/apps/printService/documenti/');
-define('DBG_CREATION','debug-create.txt');
-define('DBG_LIST','debug-list.txt');
-define('DBG_CONVERT','debug-covert.txt');
 ?>
