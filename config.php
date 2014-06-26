@@ -12,7 +12,7 @@ function decode(&$item, &$key){
 	return $item;
 }
 
-function debug($file,$data,$mode='w+'){
+function debug($file,$data,$mode='a+'){
 	if (filesize($file)>10000000) $mode="w";
 	$f=fopen($file,$mode);
 	ob_start();
