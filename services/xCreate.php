@@ -14,12 +14,7 @@ function mergeFields($T,$data){
 
 require_once "../config.php";
 $debugName=DBG_DIR."debug-create.txt";
-if (file_exists('../data.json')){
-    $f = fopen('../data.json','r');
-    $t=fread($f,filesize('../data.json'));
 
-    $_REQUEST=json_decode($t,true);
-}
 
 	require_once LIB_DIR."tbs_class.php";
 	require_once LIB_DIR."tbs_plugin_opentbs.php";
@@ -43,7 +38,7 @@ if (file_exists('../data.json')){
     }
 	$request=$_REQUEST;
 	//DECODIFICA DELLA STRINGA JSON CON DATI
-	//$_REQUEST['data']=json_decode($_REQUEST["data"],true);
+	$_REQUEST['data']=json_decode($_REQUEST["data"],true);
 	
 	
 
