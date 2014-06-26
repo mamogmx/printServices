@@ -34,8 +34,11 @@ function directoryToArray($directory, $recursive = true, $listDirs = false, $lis
 
     require_once "../config.php";
     $projects=Array("<option value=''>Seleziona un progetto</option>");
-    $pr=  directoryToArray('../documenti/',false,true,false);
-    foreach($pr as $v) $projects[]="<option value='".$v."'>$v</option>";
+    $pr=  directoryToArray('../documenti',false,true,false);
+    foreach($pr as $v) {
+        $tmp=explode("/",$v);
+        $projects[]="<option value='".$tmp[count($tmp)-1]."'>".$tmp[count($tmp)-1]."</option>";
+    }
     $options["project"]=implode("",$projects);
 ?>
 
