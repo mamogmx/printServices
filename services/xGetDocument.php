@@ -14,20 +14,28 @@ $docDir=($project)?(DOC_DIR.$project.DIRECTORY_SEPARATOR):(DOC_DIR);
 $path=$docDir.$app.DIRECTORY_SEPARATOR.$id.DIRECTORY_SEPARATOR.$fileName;
 
 if(file_exists($path)){
-	require_once("../lib/MimeReader.php");
-	$mime = new MimeReader($path);
-	$mimetype = $mime->get_type(); 
-	$size=filesize($path);
+	$path_parts = pathinfo($path);
+	$fsize=filesize($path);
 	$f=fopen($path,'r');
-	$res=fread($f,$size);
-        
+	$res=fread($f,$fsize);
 	fclose($f);
-	header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        debug($debugName,"Il file $path con dimensione $size e Mime $mimetype");
-	print $res;
-	return;
+	//header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        debug($debugName,"Il file $path con dimensione $fsize e Mime $mimetype");
+        switch ($ext) {
+            case "pdf":
+            header("Content-type: application/pdf"); 
+            header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\""); // use 'attachment' to force a download
+            break;
+            default: // Other document formats (doc, docx, odt, ods etc)
+                header('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                header("Content-Disposition: filename=\"".$path_parts["basename"]."\"");
+                
+        }
+        header("Content-length: $fsize");
+	echo $res;
 }
 else{
+        
 	debug($debugName,"Il file $path non è stato trovato");
 	print "Il file $path non è presente";
 	return;
