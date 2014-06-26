@@ -2,7 +2,7 @@
 require_once "../config.php";
 $debugName=DBG_DIR."debug-read.txt";
 
-debug($debugName,$_REQUEST);
+debug($debugName,$_REQUEST,'w');
 
 $app=$_REQUEST['app'];
 $id=$_REQUEST['id'];
@@ -22,7 +22,7 @@ if(file_exists($path)){
 	$res=fread($f,$size);
         
 	fclose($f);
-	header("Content-type: $mimetype");
+	header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         debug($debugName,"Il file $path con dimensione $size e Mime $mimetype");
 	print $res;
 	return;
