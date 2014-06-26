@@ -1,5 +1,7 @@
 <?php
-
+    require_once "../../config.php";
+    $projects=Array("<option value=''>Seleziona un progetto</option>")
+    $options["project"]=implode("",$projects);
 ?>
 
 <html>
@@ -12,7 +14,7 @@
                 width:500px;
                 padding:10px;
             }
-            input.data{
+            select.data,input.data{
                 width:200px;
                 margin-left:20px;
                 float:right;
@@ -22,13 +24,16 @@
     <body>
         <form method="POST" action="../services/xGetDocument.php" target="_new">
             <div class="container">
+                <label for="project">Progetto</label>
+                <select class="data" name="project" id="project">
+                    <?php echo $options["project"] ?>
+                </select>
+            </div>
+            <div class="container">
                 <label for="app">Applicazione</label>
                 <input class="data" type="text" name="app" id="app" value=""/>
             </div>
-            <div class="container">
-                <label for="project">Progetto</label>
-                <input class="data" type="text" name="project" id="project" value=""/>
-            </div>
+            
             <div class="container">
                 <label for="id">Id</label>
                 <input class="data" type="text" name="id" id="id" value=""/>
