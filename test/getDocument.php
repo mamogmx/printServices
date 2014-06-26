@@ -1,6 +1,41 @@
 <?php
+function directoryToArray($directory, $recursive = true, $listDirs = false, $listFiles = true, $exclude = '') {
+        $arrayItems = array();
+        $skipByExclude = false;
+        $handle = opendir($directory);
+        if ($handle) {
+            while (false !== ($file = readdir($handle))) {
+            preg_match("/(^(([\.]){1,2})$|(\.(svn|git|md))|(Thumbs\.db|\.DS_STORE))$/iu", $file, $skip);
+            if($exclude){
+                preg_match($exclude, $file, $skipByExclude);
+            }
+            if (!$skip && !$skipByExclude) {
+                if (is_dir($directory. DIRECTORY_SEPARATOR . $file)) {
+                    if($recursive) {
+                        $arrayItems = array_merge($arrayItems, directoryToArray($directory. DIRECTORY_SEPARATOR . $file, $recursive, $listDirs, $listFiles, $exclude));
+                    }
+                    if($listDirs){
+                        $file = $directory . DIRECTORY_SEPARATOR . $file;
+                        $arrayItems[] = $file;
+                    }
+                } else {
+                    if($listFiles){
+                        $file = $directory . DIRECTORY_SEPARATOR . $file;
+                        $arrayItems[] = $file;
+                    }
+                }
+            }
+        }
+        closedir($handle);
+        }
+        return $arrayItems;
+    }
+
+
     require_once "../config.php";
     $projects=Array("<option value=''>Seleziona un progetto</option>");
+    $pr=  directoryToArray('../documenti/',false,true,false);
+    foreach($pr as $v) $projects[]="<option value='".$v."'>$v</option>";
     $options["project"]=implode("",$projects);
 ?>
 
