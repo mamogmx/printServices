@@ -28,6 +28,6 @@ if(file_exists($path)){
 else{
 	
 	print "Il file $path non è presente";
-	return
+	return;
 }
 ?>
