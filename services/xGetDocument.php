@@ -24,11 +24,11 @@ if(file_exists($path)){
         switch ($ext) {
             case "pdf":
             header("Content-type: application/pdf"); 
-            header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\""); // use 'attachment' to force a download
+            //header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\""); // use 'attachment' to force a download
             break;
             default: // Other document formats (doc, docx, odt, ods etc)
                 header('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                header("Content-Disposition: filename=\"".$path_parts["basename"]."\"");
+                //header("Content-Disposition: filename=\"".$path_parts["basename"]."\"");
                 
         }
         header("Content-length: $fsize");
