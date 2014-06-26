@@ -1,6 +1,6 @@
 <?php
     require_once "../../config.php";
-    $projects=Array("<option value=''>Seleziona un progetto</option>")
+    $projects=Array("<option value=''>Seleziona un progetto</option>");
     $options["project"]=implode("",$projects);
 ?>
 
