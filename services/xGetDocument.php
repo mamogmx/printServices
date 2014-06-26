@@ -20,13 +20,15 @@ if(file_exists($path)){
 	$size=filesize($path);
 	$f=fopen($path,'r');
 	$res=fread($f,$size);
+        
 	fclose($f);
 	header("Content-type: $mimetype");
+        debug($debugName,"Il file $path con dimensione $size e Mime $mimetype");
 	print $res;
 	return;
 }
 else{
-	
+	debug($debugName,"Il file $path non è stato trovato");
 	print "Il file $path non è presente";
 	return;
 }
