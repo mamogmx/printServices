@@ -11,15 +11,23 @@
     </head>
     <body>
         <form method="POST" action="../services/xGetDocument.php" target="_new">
-            <label for="app">Applicazione</label>
-            <input type="text" name="app" id="app" value="">
-            <label for="project">Progetto</label>
-            <input type="text" name="project" id="project" value="">
-            <label for="id">Id</label>
-            <input type="text" name="id" id="id" value="">
-            <label for="filename">File</label>
-            <input type="text" name="filename" id="filename" value="">
-            
+            <div>
+                <label for="app">Applicazione</label>
+                <input type="text" name="app" id="app" value=""/>
+            </div>
+            <div>
+                <label for="project">Progetto</label>
+                <input type="text" name="project" id="project" value=""/>
+            </div>
+            <div>
+                <label for="id">Id</label>
+                <input type="text" name="id" id="id" value=""/>
+            </div>
+            <div>
+                <label for="filename">File</label>
+                <input type="text" name="filename" id="filename" value=""/>
+            </div>
+            <input type="submit" value="Invia"/>
         </form>
         
     </body>
