@@ -8,6 +8,11 @@ $filename=($_REQUEST["filename"])?($_REQUEST["filename"]):(array_pop(explode('/'
 debug($debugName,$_REQUEST);
 
 //LETTURA DEL FILE DA URL
+if (false === @file_get_contents($docurl,0,null,0,1)) {
+    $result=Array("success"=>0,"message"=>"Il file $docurl non è stato trovato");
+    echo json_encode($result);
+    return;
+}
 $f=fopen($docURL,'rb');
 $doc= stream_get_contents($f);
 fclose($f);
@@ -29,8 +34,10 @@ if (file_exists($docName) && filesize($docName)){
 	$res=exec($cmd);
 	$msg1="Overwriting:";// $dirname/$filename";
 	$msg2="convert";// $dirname/$filename";
-	if (stripos($res,$msg1)===FALSE and stripos($res,$msg2)===FALSE)
-		echo json_encode(Array("success"=>0,"message"=>$res));
+	if (stripos($res,$msg1)===FALSE and stripos($res,$msg2)===FALSE){
+            echo json_encode(Array("success"=>0,"message"=>$res));
+            return;
+        }
 	else{
 		$pdfName=str_replace('.odt','',str_replace('.docx','',$docName)).".pdf";
 		$f = fopen($pdfName,'r');
