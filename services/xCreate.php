@@ -169,24 +169,5 @@ switch($mode){
         }
         break;
 }
-if ($mode=="show"){
-        
-}
-else{
-
-    
-    
-    		 
-        if($TBS){
-                echo  json_encode();
-                debug($debugName,"Document $docFile created",'a+');
-
-        }
-        else{
-                echo json_encode(Array("success"=>-1,'filename'=>$docFile));
-                debug($debugName,"Document $docFile created",'a+');
-        }
-        return;
-}
 	
 ?>
