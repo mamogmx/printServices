@@ -4,24 +4,37 @@ $debugName=DBG_DIR."debug-convert.txt";
 
 $docURL=$_REQUEST["docurl"];
 $filename=($_REQUEST["filename"])?($_REQUEST["filename"]):(array_pop(explode('/',$_REQUEST["docurl"])));
-
+$file=$_REQUEST["file"];
 debug($debugName,$_REQUEST);
 
-//LETTURA DEL FILE DA URL
-if (false === @file_get_contents($docurl,0,null,0,1)) {
-    $result=Array("success"=>0,"message"=>"Il file $docurl non è stato trovato");
-    echo json_encode($result);
-    return;
-}
-$f=fopen($docURL,'rb');
-$doc= stream_get_contents($f);
-fclose($f);
-//SCRITTURA DEL FILE IN LOCALE
-$docName=DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.$filename;
+
+//Nome del file convertito
 $tmp=explode('.',$filename);
 array_pop($tmp);
 $basename=implode('.',$tmp);
 $filename=$basename.'.pdf';
+
+if($file){
+    //RECUPERO FILE DA POST
+    $doc = base64_decode($file);
+}
+else{
+    //LETTURA DEL FILE DA URL
+    if (false === @file_get_contents($docurl,0,null,0,1)) {
+        $result=Array("success"=>0,"message"=>"Il file $docurl non è stato trovato");
+        echo json_encode($result);
+        return;
+    }
+    $f=fopen($docURL,'rb');
+    $doc= stream_get_contents($f);
+    fclose($f); 
+}
+
+
+
+//SCRITTURA DEL FILE IN LOCALE
+$docName=DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.$filename;
+
 
 $f=fopen($docName,'w');
 if (fwrite($f,$doc)) fwrite($fDebug,"File $docName scritto correttamente. \n");
@@ -72,7 +85,7 @@ if (file_exists($docName) && filesize($docName)){
 			fwrite($f,$text);
 			fclose($f);
 			unlink($docurl);
-			echo json_encode(Array("success"=>1,"location"=>$location));
+			echo json_encode(Array("success"=>1,"file"=>base64_encode($text)));
 			return;
 		}
 			
