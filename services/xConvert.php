@@ -1,27 +1,37 @@
 <?php
 require_once "../config.php";
 $debugName=DBG_DIR."debug-convert.txt";
-
+$debugRequest=DBG_DIR."debug-convert-request.txt";
 $docURL=$_REQUEST["docurl"];
 $filename=($_REQUEST["filename"])?($_REQUEST["filename"]):(array_pop(explode('/',$_REQUEST["docurl"])));
 $file=$_REQUEST["file"];
-debug($debugName,$_REQUEST);
+debug($debugRequest,$_REQUEST);
 
 
 //Nome del file convertito
-$tmp=explode('.',$filename);
-array_pop($tmp);
-$basename=implode('.',$tmp);
-$filename=$basename.'.pdf';
+$info=pathinfo($filename);
+$filename=$info["basename"];
+
 
 if($file){
     //RECUPERO FILE DA POST
-    $doc = base64_decode($file);
+    $doc = base64_decode($file,true);
+	if(!$doc){
+		$msg="Il file non è stato codificato in base64";
+		debug($debugName,$msg);
+		header('Content-Type: application/json; charset=utf-8');
+		$result=Array("success"=>0,"message"=>$msg);
+        echo json_encode($result);
+        return;
+	}
 }
 else{
     //LETTURA DEL FILE DA URL
     if (false === @file_get_contents($docurl,0,null,0,1)) {
-        $result=Array("success"=>0,"message"=>"Il file $docurl non è stato trovato");
+		$msg="Il file $docurl non è stato trovato";
+		debug($debugName,$msg);
+        $result=Array("success"=>0,"message"=>$msg);
+		header('Content-Type: application/json; charset=utf-8');
         echo json_encode($result);
         return;
     }
@@ -37,17 +47,22 @@ $docName=DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.$filename;
 
 
 $f=fopen($docName,'w');
-if (fwrite($f,$doc)) fwrite($fDebug,"File $docName scritto correttamente. \n");
+if (fwrite($f,$doc)) {
+	$msg="File $docName scritto correttamente.";
+	debug($debugName,$msg);
+}
 fclose($f);
 
 //CONTROLLO CHE FILE SIA STATO SCRITTO
 if (file_exists($docName) && filesize($docName)){
-	
-	$cmd="HOME=/tmp/pdfout /home/silvio/libreoffice3.6/program/soffice \"-env:UserInstallation=file:///tmp/pdfout\" --headless --invisible --nologo --convert-to pdf $docName --outdir /tmp";
+	$cmd="HOME=/tmp/pdfout /home/mamo/libreoffice3.6/program/soffice \"-env:UserInstallation=file:///tmp/pdfout\" --headless --invisible --nologo --convert-to pdf ".escapeshellarg($docName)." --outdir /tmp";
+	debug($debugName,$cmd);
 	$res=exec($cmd);
 	$msg1="Overwriting:";// $dirname/$filename";
 	$msg2="convert";// $dirname/$filename";
 	if (stripos($res,$msg1)===FALSE and stripos($res,$msg2)===FALSE){
+			debug($debugName,$res);
+			header('Content-Type: application/json; charset=utf-8');
             echo json_encode(Array("success"=>0,"message"=>$res));
             return;
         }
@@ -84,7 +99,8 @@ if (file_exists($docName) && filesize($docName)){
 			$f=fopen($location,'w');
 			fwrite($f,$text);
 			fclose($f);
-			unlink($docurl);
+			//unlink($docurl);
+			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode(Array("success"=>1,"file"=>base64_encode($text)));
 			return;
 		}
@@ -93,7 +109,8 @@ if (file_exists($docName) && filesize($docName)){
 		
 		
 }
-else
+else{
+	
 	echo json_encode(Array("success"=>0,"message"=>"FILE \"$dirname/$filename\" NOT FOUND"));
-
+}
 ?>
