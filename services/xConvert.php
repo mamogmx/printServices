@@ -30,7 +30,7 @@ else{
     if (false === @file_get_contents($docurl,0,null,0,1)) {
 		$msg="Il file $docurl non è stato trovato";
 		debug($debugName,$msg);
-        $result=Array("success"=>0,"message"=>$msg);
+                $result=Array("success"=>-1,"message"=>$msg);
 		header('Content-Type: application/json; charset=utf-8');
         echo json_encode($result);
         return;
