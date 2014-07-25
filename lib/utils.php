@@ -6,8 +6,8 @@ function extractDate($d){
 }
 function decode(&$item, &$key){
     	$item=(mb_detect_encoding($item)=='UTF-8')?(utf8_decode($item)):($item);
-		$item=str_replace('<br/>',"",$item);
-		return $item;
+        $item=str_replace('<br/>',"",$item);
+        return $item;
 }
 
 function debug($file,$data,$mode='w+'){
