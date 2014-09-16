@@ -39,9 +39,11 @@ class utilsPrint {
         }
         return $string;
     }
-    static function writeFile($text,$ext,$base64=false,$name="",$dir="/tmp/"){
+    static function writeFile($text,$ext,$name="",$dir="/tmp/"){
         $nome=($name)?($name):(self::rand_str());
         $nomefile=($ext)?(sprintf("%s.%s",$nome,$ext)):($nome);
+        $textTmp=base64_decode($text,true);
+        $text=($textTmp)?($textTmp):($text);
         $f=fopen($dir.$nomefile,'w');
         $text=($base64)?(base64_decode($text,true)):($text);
         if(fwrite($f, $text)){
@@ -56,7 +58,7 @@ class utilsPrint {
         if (!file_exists($file)){
             return Array("success"=>-1,"message"=>"Il file $fName non esiste","file"=>"");
         }
-        $fileInfo=  pathinfo($file);
+        $fileInfo= pathinfo($file);
         $cmd=CMD_DIR."soffice  --headless --invisible --nologo --convert-to pdf ".escapeshellarg($file)." --outdir ".TMP_DIR;
         echo $cmd;
         $res=exec($cmd);
@@ -74,7 +76,40 @@ class utilsPrint {
             return Array("success"=>1,"message"=>"","file"=>$text);
         }
         else{
-            return Array("success"=>-1,"message"=>"Il file $fName non esiste","file"=>"");
+            return Array("success"=>-1,"message"=>"Errore generico nella conversione del file","file"=>"");
         }
+    }
+    static function decodeData($data){
+        if ( in_array( strtolower( ini_get( 'magic_quotes_gpc' ) ), array( '1', 'on' ) )){
+            $data = array_map( 'stripslashes', $data);
+        }
+
+        //DECODIFICA DELLA STRINGA JSON CON DATI
+        $result=json_decode($data,true);
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                return Array("success"=>1,"message"=>"","result"=>$result);
+                break;
+            case JSON_ERROR_DEPTH:
+                return Array("success"=>-1,"message"=>'Maximum stack depth exceeded',"result"=>$result);
+            break;
+            case JSON_ERROR_STATE_MISMATCH:
+                return Array("success"=>-1,"message"=>'Underflow or the modes mismatch',"result"=>$result);
+            break;
+            case JSON_ERROR_CTRL_CHAR:
+                return Array("success"=>-1,"message"=>'Unexpected control character found',"result"=>$result);
+            break;
+            case JSON_ERROR_SYNTAX:
+                return Array("success"=>-1,"message"=>'Syntax error, malformed JSON',"result"=>$result);
+            break;
+            case JSON_ERROR_UTF8:
+                return Array("success"=>-1,"message"=>'Malformed UTF-8 characters, possibly incorrectly encoded',"result"=>$result);
+            break;
+            default:
+                return Array("success"=>-1,"message"=>'Unknown error',"result"=>$result);
+            break;
+        }
+
+
     }
 }

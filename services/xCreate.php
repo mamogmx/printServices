@@ -21,10 +21,12 @@ require_once LIB_DIR."tbs_plugin_opentbs.php";
 $TBS = new clsTinyButStrong; // new instance of TBS
 $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load OpenTBS plugin
 
+
 //ACQUISIZIONE DATI DI REQUEST
 $filename = $_REQUEST["filename"];
 $modello=$_REQUEST["model"];
 $data=$_REQUEST["data"];
+
 
 $app=$_REQUEST["app"];
 $mode=(isset($_REQUEST["mode"]))?($_REQUEST["mode"]):("");
@@ -39,6 +41,8 @@ if ( in_array( strtolower( ini_get( 'magic_quotes_gpc' ) ), array( '1', 'on' ) )
 $request=$_REQUEST;
 //DECODIFICA DELLA STRINGA JSON CON DATI
 $_REQUEST['data']=json_decode($_REQUEST["data"],true);
+
+
 
 
 
@@ -87,6 +91,9 @@ $TBS->SetOption('noerr',true);
 debug($debugName,"Template Loaded",'a+');
 $data=$_REQUEST["data"];
 
+if (file_exists(INC_DIR.$app.".php")){
+    include INC_DIR.$app.".php";
+}
 switch($app){
     case "ordinanze":
         $keys=array_keys($data);
@@ -151,7 +158,7 @@ switch($mode){
                 $f=fopen($docfile,'r');
                 $text=fread($f,filesize($f));
                 fclose($f);
-                $result=Array("success"=>1,"file"=>  base64_encode($text));
+                $result=Array("success"=>1,'filename'=>$docFile,"file"=>  base64_encode($text));
             }
             $msg="Il file $filename è stato creato correttamente";
             debug($debugName,$msg,'a+');
