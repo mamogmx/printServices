@@ -57,6 +57,7 @@ if (!$modello){
     print json_encode($result);
     return;
 }
+
 elseif(filter_var($modello, FILTER_VALIDATE_URL)){
     $f=fopen($modello,'rb');
     $doc= stream_get_contents($f);
@@ -79,6 +80,8 @@ else{
     $modelDir=($project)?(MODEL_DIR.$project.DIRECTORY_SEPARATOR):(MODEL_DIR);
     $modelName = ($group)?($modelDir.$app.DIRECTORY_SEPARATOR.$group.DIRECTORY_SEPARATOR.$modello):($modelDir.$app.DIRECTORY_SEPARATOR.$modello);
 }
+
+$filename=($filename)?($filename):($modello);
 
 if(!file_exists($modelName)){
     $msg="Im modello $modelName non è stato trovato!";
