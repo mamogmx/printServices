@@ -23,15 +23,15 @@ $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load OpenTBS plugin
 
 
 //ACQUISIZIONE DATI DI REQUEST
-$filename = $_REQUEST["filename"];
-$modello=$_REQUEST["model"];
-$data=$_REQUEST["data"];
+$filename = (array_key_exists("filename", $_REQUEST))?($_REQUEST["filename"]):("");
+$modello=(array_key_exists("model", $_REQUEST))?($_REQUEST["model"]):("");
+$data=(array_key_exists("data", $_REQUEST))?($_REQUEST["data"]):(Array());
 
 
-$app=$_REQUEST["app"];
-$mode=(isset($_REQUEST["mode"]))?($_REQUEST["mode"]):("");
-$group=$_REQUEST["group"];
-$project=$_REQUEST["project"];
+$app=(array_key_exists("app", $_REQUEST))?($_REQUEST["app"]):("");
+$mode=(array_key_exists("mode", $_REQUEST))?($_REQUEST["mode"]):("");
+$group=(array_key_exists("group", $_REQUEST))?($_REQUEST["group"]):("");
+$project=(array_key_exists("project", $_REQUEST))?($_REQUEST["project"]):("");
 $id=($_REQUEST["id"])?($_REQUEST["id"]):(rand(1,100000));
 
 //RIMOZIONE slashes del POST
@@ -48,8 +48,6 @@ $_REQUEST['data']=json_decode($_REQUEST["data"],true);
 
 //DEBUG DEI DATI DI REQUEST
 debug($debugName,$_REQUEST,'a+'); 
-
-
 
 //MODELLO DI STAMPA
 if(filter_var($modello, FILTER_VALIDATE_URL)){
