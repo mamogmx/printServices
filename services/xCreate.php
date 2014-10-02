@@ -50,7 +50,14 @@ $_REQUEST['data']=json_decode($_REQUEST["data"],true);
 debug($debugName,$_REQUEST,'a+'); 
 
 //MODELLO DI STAMPA
-if(filter_var($modello, FILTER_VALIDATE_URL)){
+if (!$modello){
+    $msg="Nessun Parametro \"model\" passato al servizio";
+    $result=Array("success"=>0,"message"=>$msg);
+    header('Content-Type: application/json; charset=utf-8');
+    print json_encode($result);
+    return;
+}
+elseif(filter_var($modello, FILTER_VALIDATE_URL)){
     $f=fopen($modello,'rb');
     $doc= stream_get_contents($f);
     fclose($f);
