@@ -69,7 +69,7 @@ if(filter_var($modello, FILTER_VALIDATE_URL)){
     fclose($f);
 }
 else{
-    $modelDir=($project)?(MODEL.$project.DIRECTORY_SEPARATOR):(MODEL);
+    $modelDir=($project)?(MODEL_DIR.$project.DIRECTORY_SEPARATOR):(MODEL_DIR);
     $modelName = ($group)?($modelDir.$app.DIRECTORY_SEPARATOR.$group.DIRECTORY_SEPARATOR.$modello):($modelDir.$app.DIRECTORY_SEPARATOR.$modello);
 }
 

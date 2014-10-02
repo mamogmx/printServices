@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ERROR);
 define('BASE_PATH',realpath(dirname(__FILE__)).DIRECTORY_SEPARATOR);
 define('LIB_DIR',BASE_PATH."lib".DIRECTORY_SEPARATOR);
 define('INC_DIR',BASE_PATH."include".DIRECTORY_SEPARATOR);
