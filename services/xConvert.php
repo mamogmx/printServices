@@ -55,7 +55,7 @@ fclose($f);
 
 //CONTROLLO CHE FILE SIA STATO SCRITTO
 if (file_exists($docName) && filesize($docName)){
-	$cmd="HOME=/tmp/pdfout /home/mamo/libreoffice3.6/program/soffice \"-env:UserInstallation=file:///tmp/pdfout\" --headless --invisible --nologo --convert-to pdf ".escapeshellarg($docName)." --outdir /tmp";
+	$cmd=sprintf("HOME=/tmp/pdfout %ssoffice \"-env:UserInstallation=file:///tmp/pdfout\" --headless --invisible --nologo --convert-to pdf %s --outdir /tmp",LIBREOFFICE,escapeshellarg($docName));
 	debug($debugName,$cmd);
 	$res=exec($cmd);
 	$msg1="Overwriting:";// $dirname/$filename";
