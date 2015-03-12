@@ -27,8 +27,8 @@ if($file){
 }
 else{
     //LETTURA DEL FILE DA URL
-    if (false === @file_get_contents($docurl,0,null,0,1)) {
-		$msg="Il file $docurl non è stato trovato";
+    if (false === @file_get_contents($docURL,0,null,0,1)) {
+		$msg="Il file $docURL non è stato trovato";
 		debug($debugName,$msg);
                 $result=Array("success"=>-1,"message"=>$msg);
 		header('Content-Type: application/json; charset=utf-8');
@@ -68,6 +68,7 @@ if (file_exists($docName) && filesize($docName)){
         }
 	else{
 		$pdfName=str_replace('.odt','',str_replace('.docx','',$docName)).".pdf";
+		debug($debugName,"File Convertito correttamente");
 		$f = fopen($pdfName,'r');
 		$text=fread($f,filesize($pdfName));
 		fclose($f);

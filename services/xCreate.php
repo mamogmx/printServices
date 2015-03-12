@@ -62,6 +62,14 @@ elseif(filter_var($modello, FILTER_VALIDATE_URL)){
     $f=fopen($modello,'rb');
     $doc= stream_get_contents($f);
     fclose($f);
+	if(!$doc){
+		$msg="Il modello $name non è stato recuperato correttamente dalla url $modello";
+        debug($debugName,$msg,'a+');
+        $result=Array("success"=>0,"message"=>$msg);
+        header('Content-Type: application/json; charset=utf-8');
+        print json_encode($result);
+        return;
+	}
     $name=pathinfo($modello,PATHINFO_BASENAME);
     $modelName="/tmp/$name";
     $f=fopen($modelName,'w');
@@ -99,8 +107,8 @@ $TBS->SetOption('noerr',true);
 debug($debugName,"Template Loaded",'a+');
 $data=$_REQUEST["data"];
 
-if (file_exists(INC_DIR.$app.".php")){
-    include INC_DIR.$app.".php";
+if (file_exists(INC_DIR.$project.".php")){
+    include INC_DIR.$project.".php";
 }
 switch($app){
     case "ordinanze":
@@ -163,10 +171,11 @@ switch($mode){
                 $result=Array("success"=>1,'filename'=>$docFile);
             }
             else{
-                $f=fopen($docfile,'r');
-                $text=fread($f,filesize($f));
+                $f=fopen($docFile,'r');
+				$fsize=filesize($docFile);
+                $text=fread($f,$fsize);
                 fclose($f);
-                $result=Array("success"=>1,'filename'=>$docFile,"file"=>  base64_encode($text));
+                $result=Array("success"=>1,'filename'=>$docFile,"file"=>  base64_encode($text),"size"=>$fsize);
             }
             $msg="Il file $filename è stato creato correttamente";
             debug($debugName,$msg,'a+');
