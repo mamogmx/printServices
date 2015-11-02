@@ -14,7 +14,7 @@ class utilsPrint {
     }
     
 	static function mergeTemplates($T,$templates,$directory){
-		
+		$T->
 	}
     static function createDoc($model,$data){
         if (!file_exists($model)){

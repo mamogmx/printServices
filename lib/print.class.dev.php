@@ -19,6 +19,7 @@ class printDoc{
     }
     
     private function loadModelFromHTTP($url){
+        $this->debug("loadModel.debug","Modello letto da url $url",'a+');
         $f=fopen($url,'rb');
         $doc= stream_get_contents($f);
         fclose($f);
@@ -26,11 +27,11 @@ class printDoc{
             $this->errors["loadModel"] = "URL $url does not exist!";
             return FALSE;
         }
-        $filename = sprintf("%s.%s",$this->randomString(),$this->type);
+        $filename = sprintf("%s%s.%s",$this->tmpDir,$this->randomString(),$this->type);
         $f=fopen($filename,'w');
-        if (fwrite($f,$doc)) $this->debug("loadModel.debug","File $name scritto correttamente",'a+'); 
+        if (fwrite($f,$doc)) $this->debug("loadModel.debug","File $filename scritto correttamente",'a+'); 
         else{
-            $this->errors["loadData"]="Error, can't write file $filename.";
+            $this->errors["loadModel"]="Error, can't write file $filename.";
             return FALSE;
         }
         fclose($f);
@@ -38,11 +39,32 @@ class printDoc{
     }
     
     private function loadModelFromFile($file){
-        
+        $this->debug("loadModel.debug","Modello ricevuto con codifica base64",'a+');
+        $doc = base64_decode($file);
+        if(!$doc){
+            $this->errors["loadModel"] = "URL $url does not exist!";
+            return FALSE;
+        }
+        $filename = sprintf("%s%s.%s",$this->tmpDir,$this->randomString(),$this->type);
+        $f=fopen($filename,'w');
+        if (fwrite($f,$doc)) $this->debug("loadModel.debug","File $filename scritto correttamente",'a+'); 
+        else{
+            $this->errors["loadModel"]="Error, can't write file $filename.";
+            return FALSE;
+        }
+        fclose($f);
+        return $filename;
     }
     
     private function loadModelFromFileSystem($filename){
-        
+        $this->debug("loadModel.debug","Modello letto da filesystem $filename",'a+');
+        if (file_exists($filename)){
+            return $filename;
+        }
+        else{
+            $this->errors["loadModel"] = "File $filename does not exist!";
+            return FALSE;
+        }
     }
     
     private function loadModel($mode){
