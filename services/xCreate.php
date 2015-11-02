@@ -13,9 +13,11 @@ function mergeFields($T,$data){
 
 
 require_once "../config.php";
-$debugName=DBG_DIR."debug-create.txt";
 
+$id=($_REQUEST["id"])?($_REQUEST["id"]):(rand(1,100000));
+$debugName=DBG_DIR."$id-debug-create.txt";
 
+debug(DBG_DIR."REQUEST.txt",$_REQUEST,'w');
 require_once LIB_DIR."tbs_class.php";
 require_once LIB_DIR."tbs_plugin_opentbs.php";
 $TBS = new clsTinyButStrong; // new instance of TBS
@@ -32,7 +34,7 @@ $app=(array_key_exists("app", $_REQUEST))?($_REQUEST["app"]):("");
 $mode=(array_key_exists("mode", $_REQUEST))?($_REQUEST["mode"]):("");
 $group=(array_key_exists("group", $_REQUEST))?($_REQUEST["group"]):("");
 $project=(array_key_exists("project", $_REQUEST))?($_REQUEST["project"]):("");
-$id=($_REQUEST["id"])?($_REQUEST["id"]):(rand(1,100000));
+//$id=($_REQUEST["id"])?($_REQUEST["id"]):(rand(1,100000));
 
 //RIMOZIONE slashes del POST
 if ( in_array( strtolower( ini_get( 'magic_quotes_gpc' ) ), array( '1', 'on' ) )){
@@ -83,6 +85,24 @@ elseif(filter_var($modello, FILTER_VALIDATE_URL)){
         return;
     }
     fclose($f);
+}
+elseif(base64_decode($modello)!==FALSE){
+    debug($debugName,"Modello ricevuto da servizio","a+");
+    $name=$filename;
+    $modelName="/tmp/$name";
+    $doc = base64_decode($modello);
+    $f=fopen($modelName,'w');
+    if (fwrite($f,$doc)) debug($debugName,"File $name scritto correttamente",'a+'); 
+    else{
+        $msg="Invio File Modello.\nIl modello $name non è stato scritto correttamente sul server";
+        debug($debugName,$msg,'a+');
+        $result=Array("success"=>0,"message"=>$msg);
+        header('Content-Type: application/json; charset=utf-8');
+        print json_encode($result);
+        return;
+    }
+    fclose($f);
+
 }
 else{
     $modelDir=($project)?(MODEL_DIR.$project.DIRECTORY_SEPARATOR):(MODEL_DIR);

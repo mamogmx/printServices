@@ -13,6 +13,9 @@ class utilsPrint {
         }
     }
     
+	static function mergeTemplates($T,$templates,$directory){
+		
+	}
     static function createDoc($model,$data){
         if (!file_exists($model)){
             return Array("success"=>-1,"message"=>"Il File $model non è stato trovato");
@@ -79,6 +82,11 @@ class utilsPrint {
             return Array("success"=>-1,"message"=>"Errore generico nella conversione del file","file"=>"");
         }
     }
+	
+	static function transformData($data){
+		$data["oggi"]=date("%d/%m/Y");
+		return $data;
+	}
     static function decodeData($data){
         if ( in_array( strtolower( ini_get( 'magic_quotes_gpc' ) ), array( '1', 'on' ) )){
             $data = array_map( 'stripslashes', $data);
