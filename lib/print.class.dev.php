@@ -107,7 +107,7 @@ class printDoc{
         return FALSE;
     }
     
-    private function loadTemplates($files=Array()){
+    private function loadDocx($files=Array()){
         $TBS = new clsTinyButStrong; // new instance of TBS
         $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load OpenTBS plugin
 	
@@ -141,7 +141,7 @@ class printDoc{
         }
     }
     
-    function mergeTemplates(){
+    function mergeDocx(){
         $T=$this->TBS;
     }
     
