@@ -9,6 +9,11 @@ define('DBG_DIR',BASE_PATH."debug".DIRECTORY_SEPARATOR);
 define('TMP_DIR',"D:".DIRECTORY_SEPARATOR."temp".DIRECTORY_SEPARATOR);
 define('LIBREOFFICE',"/opt/libreoffice3.6/program/");
 define('CMD_DIR',"");
-$Library=Array(LIB_DIR."tbs_class.php",LIB_DIR."tbs_plugin_opentbs.php",LIB_DIR."nusoap/nusoap.php",LIB_DIR."utils.php",LIB_DIR."utils.class.php",LIB_DIR."print.class.php");
-foreach($Library as $lib) require_once $lib;
+$Library=Array(LIB_DIR."tbs_class.php",LIB_DIR."tbs_plugin_opentbs.php",LIB_DIR."nusoap/nusoap.php",LIB_DIR."print.class.php");
+
+foreach($Library as $lib){
+	//echo "<p>Loading library $lib</p>";
+	require_once $lib;
+}
+
 ?>
