@@ -18,7 +18,7 @@ class printDoc{
         $this->data = Array();
     }
     
-    private function loadModelFromHTTP($url){
+    private function loadModelFromRL($url){
         $this->debug("loadModel.debug","Modello letto da url $url",'a+');
         $f=fopen($url,'rb');
         $doc= stream_get_contents($f);
@@ -67,9 +67,25 @@ class printDoc{
         }
     }
     
-    private function loadModel($mode){
-        
-        
+    private function loadModel($mode,$model){
+        switch($mode){
+        	case "file":
+        		$filename = $this->loadModelFromFile($model);
+        		break;
+        	case "filesystem":
+        		$filename = $this->loadModelFromFileSystem($model);
+        		break;
+        	case "http":
+        		$filename = $this->loadModelFromURL($url);
+        		break;
+        	default:
+        		$filename = FALSE;
+        		$this->errors["loadModel"] = "\"$mode\" not avaiable";
+        		break;
+        }
+        if ($filename === FALSE){
+        	return $filename;
+        }
         $this->TBS->loadTemplate($filename);
         $TBSTemp->SetOption('noerr',true);
     }
