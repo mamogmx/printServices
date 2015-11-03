@@ -123,22 +123,42 @@ class printDoc{
         return FALSE;
     }
     
-    private function loadDocx($files=Array()){
+    private function loadDocx($file){
+    	if (file_exists($file)){
+    		$TBS = new clsTinyButStrong; // new instance of TBS
+    		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load OpenTBS plugin
+    		$TBS->LoadTemplate($file);
+    		$TBS->PlugIn(OPENTBS_SELECT_MAIN);
+    		$v = $TBS->GetBlockSource("source",false,false,false);
+    		return $v;
+    	}
+    	else{
+    		$this->errors["loadTemplates"][] = "Template $file not found";
+    		return FALSE;
+    	}
+    }
+    
+    private function loadAllDocx($datafiles=Array()){
         $TBS = new clsTinyButStrong; // new instance of TBS
         $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load OpenTBS plugin
 	
         $result=Array();
-        foreach($files as $file){
-            if (file_exists($file)){
-                $TBS->LoadTemplate($file);
-                $TBS->PlugIn(OPENTBS_SELECT_MAIN);
-                $v = $TBS->GetBlockSource("source",false,false,false);
-                $this->templates[]= $v;
-            }
-            else{
-                $this->errors["loadTemplates"][] = "Template $file not found";
-            }
-            
+        foreach($datafiles as $key=>$files){
+        	if (is_array($files)){
+        		for($i=0;$i<count($files);$i++){
+        			$file = $files[$i];
+        			$res = $this->loadDocx($file);
+        			if ($res !== FALSE){
+        				$this->templates[$key] = $res;
+        			}
+        		}
+        	}
+        	else{
+        		$res = $this->loadDocx($files);
+        		if ($res !== FALSE){
+        			$this->templates[$key] = $res;
+        		}
+        	}  
         }
     }
     

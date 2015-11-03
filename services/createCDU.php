@@ -160,7 +160,7 @@ if($data) {
     $TBSTemp->Show(OPENTBS_FILE, $tmpFile);
    
     if($template){
-        $TBS->LoadTemplate($$tmpFile,OPENTBS_ALREADY_XML);
+        $TBS->LoadTemplate($tmpFile,OPENTBS_ALREADY_XML);
         $TBS->MergeField("normativa",$template);
         unlink($tmpFile);
     }
