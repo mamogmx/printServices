@@ -43,7 +43,7 @@ class printDoc{
     	echo "</ol>";
     }
     
-    private function loadModelFromRL($url){
+    private function loadModelFromURL($url){
         $this->debug("loadModel.debug","Modello letto da url $url",'a+');
         $f=fopen($url,'rb');
         $doc= stream_get_contents($f);
@@ -218,7 +218,7 @@ class printDoc{
 				$TBS->MergeField($key, $value);
 			}
 			$this->TBS = $TBS;
-			//unlink($tmpFile);
+			unlink($tmpFile);
 			unset($TBS);
     	}
     }
